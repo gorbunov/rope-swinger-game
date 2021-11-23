@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public float maxVelocity;
     public float acceleration;
     public float jumpStrength;
+    public float speedLoss;
     public Rigidbody2D body;
     public Collider2D playerCollider;
 
@@ -24,13 +25,16 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        throw new NotImplementedException();
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector2 movement = directionalInput * acceleration * Time.fixedDeltaTime;
+        Vector2 movement = directionalInput.normalized * acceleration * Time.fixedDeltaTime;
         MovePlayer(movement);
     }
 
@@ -55,9 +59,14 @@ public class Player : MonoBehaviour
 
     private void MovePlayer(Vector2 movement)
     {
-        if (body.velocity.x * acceleration <= maxVelocity)
+        if (Mathf.Abs(body.velocity.x) * acceleration <= maxVelocity)
         {
             body.AddForce(movement);            
+        }
+
+        if (movement.x == 0 && Mathf.Abs(body.velocity.x) > 0)
+        {
+            body.AddForce(body.velocity.normalized * -1 * speedLoss * Time.fixedDeltaTime);
         }
     }
 }

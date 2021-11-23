@@ -15,7 +15,7 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 directionalInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 directionalInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
         player.SetDirectionalInput(directionalInput);
         if (Input.GetKeyDown(KeyCode.Space))
         {
